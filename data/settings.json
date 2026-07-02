@@ -1,0 +1,18 @@
+{
+    "players": [
+        {
+            "name": "Rosta",
+            "driver": "Bottas"
+        },
+        {
+            "name": "Pospe",
+            "driver": "Alonso"
+        },
+        {
+            "name": "Harky",
+            "driver": "Hulkenberg"
+        }
+    ],
+    "points_system": "F1",
+    "bonus_points": 1
+}
