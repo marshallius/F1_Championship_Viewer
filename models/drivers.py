@@ -23,12 +23,12 @@ DRIVERS = {
     "Albon": "Williams",
     "Sainz": "Williams",
 
-    "Hulkenberg": "Audi",
+    "Luky ladič ^^": "Audi",
     "Bortoleto": "Audi",
 
     "Lawson": "Racing Bulls",
     "Lindblad": "Racing Bulls",
 
     "Perez": "Cadillac",
-    "Bottas": "Cadillac"
+    "Marshall": "Cadillac"
 }
