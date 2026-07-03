@@ -1,6 +1,5 @@
 from pathlib import Path
 from urllib.parse import quote
-from html import escape
 
 import streamlit as st
 
@@ -10,8 +9,6 @@ from models.calendar import RACES
 COMMENTS_DIR = Path("comments")
 IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"]
 
-# Tohle je adresa k obrázkům v tvém GitHub repozitáři.
-# Pokud bys někdy změnil název GitHub účtu nebo repozitáře, upraví se to tady.
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/marshalius/F1_Championship_Viewer/main"
 
 
@@ -33,8 +30,6 @@ def get_race_images(race_name):
 def clean_image_name(image_path):
     name = image_path.stem
 
-    # Když bude soubor pojmenovaný třeba "01 Marshall",
-    # odstraní se úvodní číslo.
     if " " in name:
         first_part, rest = name.split(" ", 1)
 
@@ -45,9 +40,6 @@ def clean_image_name(image_path):
 
 
 def get_image_url(image_path):
-    # Například:
-    # comments/Bahrain GP/01 Marshall.jpg
-    # se převede na použitelný GitHub raw odkaz.
     relative_path = image_path.as_posix()
     encoded_path = quote(relative_path, safe="/")
     return f"{GITHUB_RAW_BASE}/{encoded_path}"
@@ -78,26 +70,6 @@ def set_magazine_style():
             border-bottom: 1px solid rgba(255, 255, 255, 0.18);
         }
 
-        .interview-card {
-            background: rgba(18, 21, 30, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 18px;
-            padding: 12px;
-            box-shadow: 0 10px 26px rgba(0,0,0,0.35);
-            margin-bottom: 1.2rem;
-        }
-
-        .interview-card a {
-            text-decoration: none;
-        }
-
-        .interview-image {
-            width: 100%;
-            border-radius: 12px;
-            display: block;
-            cursor: zoom-in;
-        }
-
         .interview-name {
             text-align: center;
             font-size: 18px;
@@ -111,12 +83,17 @@ def set_magazine_style():
             font-size: 13px;
             color: #aeb6c2;
             margin-top: 0.2rem;
+            margin-bottom: 0.5rem;
         }
 
         .empty-race {
             color: #8f98a8;
             font-size: 15px;
             margin-bottom: 1rem;
+        }
+
+        img {
+            border-radius: 12px;
         }
         </style>
         """,
@@ -141,7 +118,7 @@ for race in RACES:
     images = get_race_images(race_name)
 
     st.markdown(
-        f'<div class="race-title">{race["number"]}. {escape(race_name)}</div>',
+        f'<div class="race-title">{race["number"]}. {race_name}</div>',
         unsafe_allow_html=True
     )
 
@@ -156,26 +133,27 @@ for race in RACES:
 
     for index, image_path in enumerate(images[:3]):
         image_name = clean_image_name(image_path)
-        image_url = get_image_url(image_path)
 
         with columns[index]:
-            st.markdown(
-                f"""
-                <div class="interview-card">
-                    <a href="{image_url}" target="_blank" rel="noopener noreferrer">
-                        <img
-                            src="{image_url}"
-                            class="interview-image"
-                            alt="{escape(image_name)}"
-                            loading="lazy"
-                        >
-                    </a>
+            st.image(
+                str(image_path),
+                width="stretch"
+            )
 
-                    <div class="interview-name">{escape(image_name)}</div>
-                    <div class="interview-note">Klepni na obrázek pro otevření ve velkém</div>
-                </div>
-                """,
+            st.markdown(
+                f'<div class="interview-name">{image_name}</div>',
                 unsafe_allow_html=True
+            )
+
+            st.markdown(
+                '<div class="interview-note">Pozávodní rozhovor</div>',
+                unsafe_allow_html=True
+            )
+
+            st.link_button(
+                "🔍 Otevřít ve velkém",
+                get_image_url(image_path),
+                width="stretch"
             )
 
     if len(images) > 3:
