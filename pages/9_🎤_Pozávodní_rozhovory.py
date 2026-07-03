@@ -6,10 +6,9 @@ import streamlit as st
 from models.calendar import RACES
 
 
-COMMENTS_DIR = Path("comments")
+STATIC_DIR = Path("static")
+COMMENTS_DIR = STATIC_DIR / "comments"
 IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"]
-
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/marshalius/F1_Championship_Viewer/main"
 
 
 def get_race_images(race_name):
@@ -39,10 +38,10 @@ def clean_image_name(image_path):
     return name
 
 
-def get_image_url(image_path):
-    relative_path = image_path.as_posix()
+def get_static_image_url(image_path):
+    relative_path = image_path.relative_to(STATIC_DIR).as_posix()
     encoded_path = quote(relative_path, safe="/")
-    return f"{GITHUB_RAW_BASE}/{encoded_path}"
+    return f"/app/static/{encoded_path}"
 
 
 def set_magazine_style():
@@ -158,7 +157,7 @@ for race in RACES:
 
             st.link_button(
                 "🔍 Otevřít ve velkém",
-                get_image_url(image_path),
+                get_static_image_url(image_path),
                 width="stretch"
             )
 
