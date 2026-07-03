@@ -234,6 +234,7 @@ def render_centered_table(df):
 
     st.markdown(styled_html, unsafe_allow_html=True)
 
+
 st.title("🏁 F1 Championship Manager")
 st.subheader(f"Sezóna {data['season']}")
 
