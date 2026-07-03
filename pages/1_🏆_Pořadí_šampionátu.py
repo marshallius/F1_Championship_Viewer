@@ -139,6 +139,53 @@ def calculate_constructor_standings(data):
 
     return table
 
+def render_centered_table(df, width="96%", font_size="16px"):
+    styled_html = (
+        df.to_html(index=False, escape=False)
+        .replace(
+            '<table border="1" class="dataframe">',
+            '<table class="custom-table">'
+        )
+    )
+
+    st.markdown(
+        f"""
+        <style>
+        .custom-table {{
+            width: {width};
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+            font-size: {font_size};
+        }}
+
+        .custom-table th {{
+            text-align: center !important;
+            padding: 10px;
+            background-color: #1f222b;
+            border: 1px solid #333842;
+            font-weight: 700;
+        }}
+
+        .custom-table td {{
+            text-align: center !important;
+            padding: 9px;
+            border: 1px solid #333842;
+        }}
+
+        .custom-table tr:nth-child(even) {{
+            background-color: rgba(255, 255, 255, 0.03);
+        }}
+
+        .custom-table tr:nth-child(odd) {{
+            background-color: rgba(255, 255, 255, 0.01);
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(styled_html, unsafe_allow_html=True)
 
 st.title("🏆 Pořadí šampionátu")
 
@@ -175,18 +222,18 @@ left, right = st.columns([2, 1])
 
 st.subheader("👤 Pořadí jezdců")
 
-st.dataframe(
+render_centered_table(
     driver_table,
-    use_container_width=True,
-    hide_index=True
+    width="85%",
+    font_size="14px"
 )
 
 st.divider()
 
 st.subheader("🏭 Pořadí konstruktérů")
 
-st.dataframe(
+render_centered_table(
     constructor_table,
-    use_container_width=True,
-    hide_index=True
+    width="83%",
+    font_size="14px"
 )
