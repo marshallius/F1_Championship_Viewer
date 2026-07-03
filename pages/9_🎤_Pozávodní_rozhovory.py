@@ -49,22 +49,28 @@ def set_magazine_style():
     st.markdown(
         """
         <style>
+        .block-container {
+            max-width: 1700px;
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+        }
+
         .magazine-title {
-            font-size: 42px;
+            font-size: 44px;
             font-weight: 900;
             margin-bottom: 0.2rem;
         }
 
         .magazine-subtitle {
-            font-size: 17px;
+            font-size: 18px;
             color: #b8c0cc;
             margin-bottom: 2rem;
         }
 
         .race-title {
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 850;
-            margin-top: 2.3rem;
+            margin-top: 2.4rem;
             margin-bottom: 1.1rem;
             padding-bottom: 0.4rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.18);
@@ -72,7 +78,7 @@ def set_magazine_style():
 
         .interview-name {
             text-align: center;
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 800;
             margin-top: 0.7rem;
             color: #ffffff;
@@ -129,7 +135,7 @@ for race in RACES:
         )
         continue
 
-    columns = st.columns(3)
+    columns = st.columns(3, gap="large")
 
     for index, image_path in enumerate(images[:3]):
         image_name = clean_image_name(image_path)
