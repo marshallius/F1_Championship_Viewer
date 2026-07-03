@@ -1,13 +1,11 @@
 from pathlib import Path
-from urllib.parse import quote
 
 import streamlit as st
 
 from models.calendar import RACES
 
 
-STATIC_DIR = Path("static")
-COMMENTS_DIR = STATIC_DIR / "comments"
+COMMENTS_DIR = Path("comments")
 IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"]
 
 
@@ -29,6 +27,8 @@ def get_race_images(race_name):
 def clean_image_name(image_path):
     name = image_path.stem
 
+    # Když bude soubor pojmenovaný třeba "01 Marshall",
+    # odstraní se jen úvodní číslo.
     if " " in name:
         first_part, rest = name.split(" ", 1)
 
@@ -38,46 +38,43 @@ def clean_image_name(image_path):
     return name
 
 
-def get_static_image_url(image_path):
-    relative_path = image_path.relative_to(STATIC_DIR).as_posix()
-    encoded_path = quote(relative_path, safe="/")
-    return f"/app/static/{encoded_path}"
-
-
 def set_magazine_style():
     st.markdown(
         """
         <style>
-        .block-container {
-            max-width: 1700px;
-            padding-left: 2.5rem;
-            padding-right: 2.5rem;
-        }
-
         .magazine-title {
-            font-size: 44px;
+            font-size: 42px;
             font-weight: 900;
             margin-bottom: 0.2rem;
         }
 
         .magazine-subtitle {
-            font-size: 18px;
+            font-size: 17px;
             color: #b8c0cc;
             margin-bottom: 2rem;
         }
 
         .race-title {
-            font-size: 34px;
+            font-size: 32px;
             font-weight: 850;
-            margin-top: 2.4rem;
+            margin-top: 2.3rem;
             margin-bottom: 1.1rem;
             padding-bottom: 0.4rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.18);
         }
 
+        .interview-card {
+            background: rgba(18, 21, 30, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            padding: 12px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+            margin-bottom: 1.2rem;
+        }
+
         .interview-name {
             text-align: center;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             margin-top: 0.7rem;
             color: #ffffff;
@@ -88,7 +85,6 @@ def set_magazine_style():
             font-size: 13px;
             color: #aeb6c2;
             margin-top: 0.2rem;
-            margin-bottom: 0.5rem;
         }
 
         .empty-race {
@@ -134,32 +130,26 @@ for race in RACES:
         )
         continue
 
-    columns = st.columns(3, gap="large")
+    columns = st.columns(3)
 
     for index, image_path in enumerate(images[:3]):
-        image_name = clean_image_name(image_path)
-
         with columns[index]:
+            st.markdown('<div class="interview-card">', unsafe_allow_html=True)
+
             st.image(
                 str(image_path),
                 width="stretch"
             )
 
             st.markdown(
-                f'<div class="interview-name">{image_name}</div>',
+                f"""
+                <div class="interview-name">{clean_image_name(image_path)}</div>
+                <div class="interview-note">Pozávodní rozhovor</div>
+                """,
                 unsafe_allow_html=True
             )
 
-            st.markdown(
-                '<div class="interview-note">Pozávodní rozhovor</div>',
-                unsafe_allow_html=True
-            )
-
-            st.link_button(
-                "🔍 Otevřít ve velkém",
-                get_static_image_url(image_path),
-                width="stretch"
-            )
+            st.markdown("</div>", unsafe_allow_html=True)
 
     if len(images) > 3:
         st.caption(f"V tomto závodě je nahráno {len(images)} obrázků, zobrazují se první 3.")
