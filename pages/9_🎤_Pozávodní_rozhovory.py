@@ -8,6 +8,13 @@ from models.calendar import RACES
 COMMENTS_DIR = Path("comments")
 IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"]
 
+DRIVER_LABELS = [
+    "Marshall",
+    "Cpt. Franz Hermann",
+    "Luky ladič ^^"
+    
+]
+
 
 def get_race_images(race_name):
     race_dir = COMMENTS_DIR / race_name
@@ -27,8 +34,6 @@ def get_race_images(race_name):
 def clean_image_name(image_path):
     name = image_path.stem
 
-    # Když bude soubor pojmenovaný třeba "01 Marshall",
-    # odstraní se jen úvodní číslo.
     if " " in name:
         first_part, rest = name.split(" ", 1)
 
@@ -63,13 +68,17 @@ def set_magazine_style():
             border-bottom: 1px solid rgba(255, 255, 255, 0.18);
         }
 
-        .interview-card {
-            background: rgba(18, 21, 30, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 18px;
-            padding: 12px;
-            box-shadow: 0 10px 26px rgba(0,0,0,0.35);
-            margin-bottom: 1.2rem;
+        .driver-strip {
+            background: rgba(28, 32, 44, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 14px 14px 0 0;
+            padding: 10px 14px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            margin-bottom: 0;
         }
 
         .interview-name {
@@ -85,6 +94,7 @@ def set_magazine_style():
             font-size: 13px;
             color: #aeb6c2;
             margin-top: 0.2rem;
+            margin-bottom: 1.2rem;
         }
 
         .empty-race {
@@ -94,7 +104,7 @@ def set_magazine_style():
         }
 
         img {
-            border-radius: 12px;
+            border-radius: 0 0 12px 12px;
         }
         </style>
         """,
@@ -130,11 +140,16 @@ for race in RACES:
         )
         continue
 
-    columns = st.columns(3)
+    columns = st.columns(3, gap="large")
 
     for index, image_path in enumerate(images[:3]):
+        driver_name = DRIVER_LABELS[index] if index < len(DRIVER_LABELS) else clean_image_name(image_path)
+
         with columns[index]:
-            st.markdown('<div class="interview-card">', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="driver-strip">{driver_name}</div>',
+                unsafe_allow_html=True
+            )
 
             st.image(
                 str(image_path),
@@ -148,8 +163,6 @@ for race in RACES:
                 """,
                 unsafe_allow_html=True
             )
-
-            st.markdown("</div>", unsafe_allow_html=True)
 
     if len(images) > 3:
         st.caption(f"V tomto závodě je nahráno {len(images)} obrázků, zobrazují se první 3.")

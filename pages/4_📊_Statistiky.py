@@ -136,7 +136,7 @@ st.subheader("Kompletní statistiky jezdců")
 
 st.dataframe(
     stats_table,
-    use_container_width=True,
+    use_container_width="stretch",
     hide_index=True
 )
 
@@ -152,7 +152,7 @@ with col1:
         stats_table[["Jezdec", "Tým", "Výhry", "Pódia", "Body"]]
         .sort_values(by=["Výhry", "Pódia", "Body"], ascending=False)
         .head(10),
-        use_container_width=True,
+        use_container_width="stretch",
         hide_index=True
     )
 
@@ -161,7 +161,7 @@ with col1:
         stats_table[["Jezdec", "Tým", "Body sprint", "Body"]]
         .sort_values(by=["Body sprint", "Body"], ascending=False)
         .head(10),
-        use_container_width=True,
+        use_container_width="stretch",
         hide_index=True
     )
 
@@ -171,7 +171,7 @@ with col2:
         stats_table[["Jezdec", "Tým", "Bonusové body", "Body"]]
         .sort_values(by=["Bonusové body", "Body"], ascending=False)
         .head(10),
-        use_container_width=True,
+        use_container_width="stretch",
         hide_index=True
     )
 
@@ -180,6 +180,6 @@ with col2:
         stats_table[["Jezdec", "Tým", "TOP 10", "Body"]]
         .sort_values(by=["TOP 10", "Body"], ascending=False)
         .head(10),
-        use_container_width=True,
+        use_container_width="stretch",
         hide_index=True
     )

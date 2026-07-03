@@ -12,7 +12,7 @@ DRIVERS = {
     "Antonelli": "Mercedes",
 
     "Alonso": "Aston Martin",
-    "Stroll": "Aston Martin",
+    "Cpt. Franz Hermann": "Aston Martin",
 
     "Gasly": "Alpine",
     "Colapinto": "Alpine",

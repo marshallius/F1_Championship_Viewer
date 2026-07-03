@@ -96,7 +96,7 @@ else:
 
         st.dataframe(
             sprint_results,
-            use_container_width=True,
+            use_container_width="stretch",
             hide_index=True
         )
 
@@ -127,7 +127,7 @@ else:
 
     st.dataframe(
         bonus_table,
-        use_container_width=True,
+        use_container_width="stretch",
         hide_index=True
     )
 
@@ -139,7 +139,7 @@ else:
 
     st.dataframe(
         results,
-        use_container_width=True,
+        use_container_width="stretch",
         hide_index=True
     )
 

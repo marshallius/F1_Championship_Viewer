@@ -52,7 +52,7 @@ calendar_table = pd.DataFrame(calendar_rows)
 
 st.dataframe(
     calendar_table,
-    use_container_width=True,
+    use_container_width="stretch",
     hide_index=True
 )
 

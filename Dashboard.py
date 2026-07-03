@@ -26,7 +26,7 @@ DRIVER_COLORS = {
 
     # Aston Martin
     "Alonso": "#00B894",
-    "Stroll": "#00E0A8",
+    "Cpt. Franz Hermann": "#00E0A8",
 
     # Alpine
     "Colapinto": "#FF3DFF",
