@@ -7,6 +7,7 @@ import altair as alt
 
 from models.drivers import DRIVERS
 
+
 DRIVER_COLORS = {
     # Red Bull
     "Verstappen": "#62A8FF",
@@ -53,7 +54,9 @@ DRIVER_COLORS = {
     "Marshall": "#FFF04A"
 }
 
+
 DATA_FILE = Path("data/championship.json")
+
 
 st.set_page_config(
     page_title="F1 Championship Manager",
@@ -86,11 +89,21 @@ def calculate_driver_standings(data):
         for driver, team in DRIVERS.items()
     }
 
-    for race in data["races"]:
-        for result in race["results"]:
-            driver = result["Jezdec"]
-            position = result["Pozice"]
-            points = result["Body"]
+    for race in data.get("races", []):
+        for result in race.get("results", []):
+            driver = result.get("Jezdec", "")
+            team = result.get("Tým", DRIVERS.get(driver, ""))
+            position = result.get("Pozice", 0)
+            points = result.get("Body", 0)
+
+            if driver not in standings:
+                standings[driver] = {
+                    "Jezdec": driver,
+                    "Tým": team,
+                    "Body": 0,
+                    "Výhry": 0,
+                    "Pódia": 0
+                }
 
             standings[driver]["Body"] += points
 
@@ -125,11 +138,19 @@ def calculate_constructor_standings(data):
         for team in teams
     }
 
-    for race in data["races"]:
-        for result in race["results"]:
-            team = result["Tým"]
-            position = result["Pozice"]
-            points = result["Body"]
+    for race in data.get("races", []):
+        for result in race.get("results", []):
+            team = result.get("Tým", "")
+            position = result.get("Pozice", 0)
+            points = result.get("Body", 0)
+
+            if team not in standings:
+                standings[team] = {
+                    "Tým": team,
+                    "Body": 0,
+                    "Výhry": 0,
+                    "Pódia": 0
+                }
 
             standings[team]["Body"] += points
 
@@ -150,6 +171,7 @@ def calculate_constructor_standings(data):
 
     return table
 
+
 def calculate_driver_points_history(data):
     totals = {
         driver: 0
@@ -169,7 +191,8 @@ def calculate_driver_points_history(data):
             totals[driver] += points
 
         row = {
-            "Závod": race.get("race", "")
+            "Závod": race.get("race", ""),
+            "Číslo závodu": race.get("race_number", len(rows) + 1)
         }
 
         for driver, points in totals.items():
@@ -177,22 +200,20 @@ def calculate_driver_points_history(data):
 
         rows.append(row)
 
-    return pd.DataFrame(rows)
+    columns = ["Závod", "Číslo závodu"] + list(totals.keys())
 
-data = load_data()
+    if not rows:
+        return pd.DataFrame(columns=columns)
 
-driver_table = calculate_driver_standings(data)
-constructor_table = calculate_constructor_standings(data)
+    return pd.DataFrame(rows, columns=columns)
 
-races_done = len(data["races"])
-total_races = 24
 
 def render_centered_table(df):
     styled_html = (
         df.to_html(index=False, escape=False)
         .replace(
-            "<table border=\"1\" class=\"dataframe\">",
-            "<table class=\"custom-table\">"
+            '<table border="1" class="dataframe">',
+            '<table class="custom-table">'
         )
     )
 
@@ -235,6 +256,98 @@ def render_centered_table(df):
     st.markdown(styled_html, unsafe_allow_html=True)
 
 
+def render_driver_points_chart(data):
+    st.subheader("📈 Vývoj bodů jezdců")
+
+    points_history = calculate_driver_points_history(data)
+
+    if points_history.empty:
+        st.info("Graf vývoje bodů se zobrazí po prvním uloženém závodě.")
+        return
+
+    chart_long = points_history.melt(
+        id_vars=["Závod", "Číslo závodu"],
+        var_name="Jezdec",
+        value_name="Body"
+    )
+
+    chart = (
+        alt.Chart(chart_long)
+        .mark_line(
+            point=alt.OverlayMarkDef(
+                filled=True,
+                size=80
+            )
+        )
+        .encode(
+            x=alt.X(
+                "Číslo závodu:Q",
+                title="Závod",
+                scale=alt.Scale(
+                    domain=[1, 24]
+                ),
+                axis=alt.Axis(
+                    tickMinStep=1
+                )
+            ),
+            y=alt.Y(
+                "Body:Q",
+                title="Body",
+                scale=alt.Scale(
+                    domainMin=0,
+                    zero=True
+                )
+            ),
+            color=alt.Color(
+                "Jezdec:N",
+                title="Jezdec",
+                scale=alt.Scale(
+                    domain=list(DRIVER_COLORS.keys()),
+                    range=list(DRIVER_COLORS.values())
+                ),
+                legend=alt.Legend(
+                    orient="bottom",
+                    direction="horizontal",
+                    columns=22,
+                    labelLimit=0,
+                    symbolSize=120,
+                    labelFontSize=15,
+                    title="Jezdec",
+                    columnPadding=35,
+                    labelOffset=6
+                )
+            ),
+            tooltip=[
+                "Číslo závodu:Q",
+                "Závod:N",
+                "Jezdec:N",
+                "Body:Q"
+            ]
+        )
+        .properties(
+            height=450
+        )
+        .interactive(
+            bind_x=True,
+            bind_y=False
+        )
+    )
+
+    st.altair_chart(
+        chart,
+        width="stretch"
+    )
+
+
+data = load_data()
+
+driver_table = calculate_driver_standings(data)
+constructor_table = calculate_constructor_standings(data)
+
+races_done = len(data.get("races", []))
+total_races = 24
+
+
 st.title("🏁 F1 Championship Manager")
 st.subheader(f"Sezóna {data['season']}")
 
@@ -275,7 +388,6 @@ else:
     st.subheader(last_race["race"])
 
     last_results = pd.DataFrame(last_race["results"])
-
     podium = last_results.head(3)
 
     col1, col2, col3 = st.columns(3)
@@ -294,81 +406,7 @@ else:
 
     st.divider()
 
-st.subheader("📈 Vývoj bodů jezdců")
-
-points_history = calculate_driver_points_history(data)
-
-if points_history.empty:
-    st.info("Graf vývoje bodů se zobrazí po prvním uloženém závodě.")
-else:
-    chart_data = points_history.set_index("Závod")
-
-    chart_long = points_history.melt(
-    id_vars="Závod",
-    var_name="Jezdec",
-    value_name="Body"
-)
-
-race_order = points_history["Závod"].tolist()
-
-chart = (
-    alt.Chart(chart_long)
-    .mark_line(
-        point=alt.OverlayMarkDef(
-            filled=True,
-            size=80
-        )
-    )
-    .encode(
-        x=alt.X(
-            "Závod:N",
-            sort=race_order,
-            title="Závod"
-        ),
-        y=alt.Y(
-    "Body:Q",
-    title="Body",
-    scale=alt.Scale(
-        domainMin=0,
-        zero=True)
-        ),
-        color=alt.Color(
-    "Jezdec:N",
-    title="Jezdec",
-    scale=alt.Scale(
-        domain=list(DRIVER_COLORS.keys()),
-        range=list(DRIVER_COLORS.values())
-    ),
-    legend=alt.Legend(
-    orient="bottom",
-    direction="horizontal",
-    columns=22,
-    labelLimit=0,
-    symbolSize=120,
-    labelFontSize=15,
-    title="Jezdec",
-    columnPadding=35,
-    labelOffset=6
-)
-    ),
-        tooltip=[
-            "Závod:N",
-            "Jezdec:N",
-            "Body:Q"
-        ]
-    )
-    .properties(
-        height=450
-    )
-    .interactive(
-    bind_x=True,
-    bind_y=False)
-    )
-
-st.altair_chart(
-    chart,
-    width="stretch"
-)
+render_driver_points_chart(data)
 
 st.divider()
 
@@ -404,4 +442,3 @@ with col2:
     ]
 
     render_centered_table(top_constructors)
-
