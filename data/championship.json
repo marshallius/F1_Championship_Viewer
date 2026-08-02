@@ -1,6 +1,6 @@
 {
     "season": 2026,
-    "current_race": 1,
+    "current_race": 2,
     "races": [
         {
             "race": "Austrian GP",
@@ -209,6 +209,220 @@
                     "Pozice": 22,
                     "Jezdec": "Marshall",
                     "Tým": "Cadillac",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                }
+            ]
+        },
+        {
+            "race": "Barcelona GP",
+            "race_number": 9,
+            "sprint": false,
+            "sprint_wet": false,
+            "race_wet": false,
+            "sprint_results": [],
+            "bonuses": {
+                "fastest_lap": "Marshall",
+                "driver_of_day": "Cpt. Franz Hermann",
+                "most_overtakes": "Cpt. Franz Hermann",
+                "cleanest_driver": "Cpt. Franz Hermann"
+            },
+            "results": [
+                {
+                    "Pozice": 1,
+                    "Jezdec": "Cpt. Franz Hermann",
+                    "Tým": "Aston Martin",
+                    "Body závod": 25,
+                    "Body sprint": 0,
+                    "Bonusy": 3,
+                    "Body": 28
+                },
+                {
+                    "Pozice": 2,
+                    "Jezdec": "Alonso",
+                    "Tým": "Aston Martin",
+                    "Body závod": 18,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 18
+                },
+                {
+                    "Pozice": 3,
+                    "Jezdec": "Norris",
+                    "Tým": "McLaren",
+                    "Body závod": 15,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 15
+                },
+                {
+                    "Pozice": 4,
+                    "Jezdec": "Verstappen",
+                    "Tým": "Red Bull",
+                    "Body závod": 12,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 12
+                },
+                {
+                    "Pozice": 5,
+                    "Jezdec": "Russell",
+                    "Tým": "Mercedes",
+                    "Body závod": 10,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 10
+                },
+                {
+                    "Pozice": 6,
+                    "Jezdec": "Marshall",
+                    "Tým": "Cadillac",
+                    "Body závod": 8,
+                    "Body sprint": 0,
+                    "Bonusy": 1,
+                    "Body": 9
+                },
+                {
+                    "Pozice": 7,
+                    "Jezdec": "Sainz",
+                    "Tým": "Williams",
+                    "Body závod": 6,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 6
+                },
+                {
+                    "Pozice": 8,
+                    "Jezdec": "Leclerc",
+                    "Tým": "Ferrari",
+                    "Body závod": 4,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 4
+                },
+                {
+                    "Pozice": 9,
+                    "Jezdec": "Albon",
+                    "Tým": "Williams",
+                    "Body závod": 2,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 2
+                },
+                {
+                    "Pozice": 10,
+                    "Jezdec": "Perez",
+                    "Tým": "Cadillac",
+                    "Body závod": 1,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 1
+                },
+                {
+                    "Pozice": 11,
+                    "Jezdec": "Hamilton",
+                    "Tým": "Ferrari",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 12,
+                    "Jezdec": "Gasly",
+                    "Tým": "Alpine",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 13,
+                    "Jezdec": "Piastri",
+                    "Tým": "McLaren",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 14,
+                    "Jezdec": "Bortoleto",
+                    "Tým": "Audi",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 15,
+                    "Jezdec": "Colapinto",
+                    "Tým": "Alpine",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 16,
+                    "Jezdec": "Hadjar",
+                    "Tým": "Red Bull",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 17,
+                    "Jezdec": "Ocon",
+                    "Tým": "Haas",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 18,
+                    "Jezdec": "Lawson",
+                    "Tým": "Racing Bulls",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 19,
+                    "Jezdec": "Antonelli",
+                    "Tým": "Mercedes",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 20,
+                    "Jezdec": "Luky ladič ^^",
+                    "Tým": "Audi",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 21,
+                    "Jezdec": "Bearman",
+                    "Tým": "Haas",
+                    "Body závod": 0,
+                    "Body sprint": 0,
+                    "Bonusy": 0,
+                    "Body": 0
+                },
+                {
+                    "Pozice": 22,
+                    "Jezdec": "Lindblad",
+                    "Tým": "Racing Bulls",
                     "Body závod": 0,
                     "Body sprint": 0,
                     "Bonusy": 0,
