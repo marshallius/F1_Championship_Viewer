@@ -327,10 +327,6 @@ def render_driver_points_chart(data):
         .properties(
             height=450
         )
-        .interactive(
-            bind_x=True,
-            bind_y=False
-        )
     )
 
     st.altair_chart(
