@@ -353,7 +353,7 @@ st.subheader(f"Sezóna {data['season']}")
 
 st.divider()
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.metric("Odjeté závody", f"{races_done} / {total_races}")
@@ -374,8 +374,6 @@ with col3:
         f"{leader_team['Body']} bodů"
     )
 
-with col4:
-    st.metric("Počet jezdců", len(DRIVERS))
 
 st.divider()
 
