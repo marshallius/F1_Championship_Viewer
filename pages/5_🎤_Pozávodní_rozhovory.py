@@ -139,7 +139,6 @@ for race in RACES:
             st.markdown(
                 f"""
                 <div class="interview-name">{clean_image_name(image_path)}</div>
-                <div class="interview-note">Pozávodní rozhovor</div>
                 """,
                 unsafe_allow_html=True
             )
