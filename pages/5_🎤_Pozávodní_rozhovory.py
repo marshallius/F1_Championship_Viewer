@@ -68,19 +68,6 @@ def set_magazine_style():
             border-bottom: 1px solid rgba(255, 255, 255, 0.18);
         }
 
-        .driver-strip {
-            background: rgba(28, 32, 44, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            border-radius: 14px 14px 0 0;
-            padding: 10px 14px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: 900;
-            color: #ffffff;
-            letter-spacing: 0.3px;
-            margin-bottom: 0;
-        }
-
         .interview-name {
             text-align: center;
             font-size: 18px;
@@ -143,14 +130,7 @@ for race in RACES:
     columns = st.columns(3, gap="large")
 
     for index, image_path in enumerate(images[:3]):
-        driver_name = DRIVER_LABELS[index] if index < len(DRIVER_LABELS) else clean_image_name(image_path)
-
         with columns[index]:
-            st.markdown(
-                f'<div class="driver-strip">{driver_name}</div>',
-                unsafe_allow_html=True
-            )
-
             st.image(
                 str(image_path),
                 width="stretch"
