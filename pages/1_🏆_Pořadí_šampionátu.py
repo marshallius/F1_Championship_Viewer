@@ -38,7 +38,9 @@ def calculate_driver_standings(data):
             "Bonusy": 0,
             "Výhry": 0,
             "Pódia": 0,
-            "TOP 10": 0
+            "TOP 10": 0,
+            **{f"_R_P{position}": 0 for position in range(1, len(DRIVERS) + 1)},
+            **{f"_S_P{position}": 0 for position in range(1, len(DRIVERS) + 1)}
         }
         for driver, team in DRIVERS.items()
     }
@@ -71,14 +73,43 @@ def calculate_driver_standings(data):
             if position <= 10:
                 standings[driver]["TOP 10"] += 1
 
+            if 1 <= position <= len(DRIVERS):
+                standings[driver][f"_R_P{position}"] += 1
+
+        for sprint_result in race.get("sprint_results", []):
+            sprint_driver = sprint_result.get("Jezdec", "")
+            sprint_position = sprint_result.get("Sprint pozice", 0)
+
+            if sprint_driver not in standings:
+                continue
+
+            if 1 <= sprint_position <= len(DRIVERS):
+                standings[sprint_driver][f"_S_P{sprint_position}"] += 1
+
     table = pd.DataFrame(standings.values())
 
+    race_tiebreak_columns = [
+        f"_R_P{position}"
+        for position in range(1, len(DRIVERS) + 1)
+    ]
+    sprint_tiebreak_columns = [
+        f"_S_P{position}"
+        for position in range(1, len(DRIVERS) + 1)
+    ]
+
     table = table.sort_values(
-        by=["Body", "Výhry", "Pódia", "TOP 10"],
-        ascending=False
+        by=["Body"] + race_tiebreak_columns + sprint_tiebreak_columns,
+        ascending=[False] * (
+            1 + len(race_tiebreak_columns) + len(sprint_tiebreak_columns)
+        ),
+        kind="stable"
     )
 
     table.insert(0, "Pořadí", range(1, len(table) + 1))
+
+    table = table.drop(
+        columns=race_tiebreak_columns + sprint_tiebreak_columns
+    )
 
     return table
 

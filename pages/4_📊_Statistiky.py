@@ -34,6 +34,8 @@ def create_driver_stats(data):
             "Výhry": 0,
             "Pódia": 0,
             "TOP 10": 0,
+            **{f"_R_P{position}": 0 for position in range(1, len(DRIVERS) + 1)},
+            **{f"_S_P{position}": 0 for position in range(1, len(DRIVERS) + 1)},
             "Nejrychlejší kola": 0,
             "Driver of the Day": 0,
             "Nejvíce předjetí": 0,
@@ -69,6 +71,19 @@ def create_driver_stats(data):
             if position <= 10:
                 stats[driver]["TOP 10"] += 1
 
+            if 1 <= position <= len(DRIVERS):
+                stats[driver][f"_R_P{position}"] += 1
+
+        for sprint_result in race.get("sprint_results", []):
+            sprint_driver = sprint_result.get("Jezdec", "")
+            sprint_position = sprint_result.get("Sprint pozice", 0)
+
+            if sprint_driver not in stats:
+                continue
+
+            if 1 <= sprint_position <= len(DRIVERS):
+                stats[sprint_driver][f"_S_P{sprint_position}"] += 1
+
         fastest_lap = bonuses.get("fastest_lap", "")
         driver_of_day = bonuses.get("driver_of_day", "")
         most_overtakes = bonuses.get("most_overtakes", "")
@@ -88,12 +103,28 @@ def create_driver_stats(data):
 
     table = pd.DataFrame(stats.values())
 
+    race_tiebreak_columns = [
+        f"_R_P{position}"
+        for position in range(1, len(DRIVERS) + 1)
+    ]
+    sprint_tiebreak_columns = [
+        f"_S_P{position}"
+        for position in range(1, len(DRIVERS) + 1)
+    ]
+
     table = table.sort_values(
-        by=["Body", "Výhry", "Pódia", "TOP 10"],
-        ascending=False
+        by=["Body"] + race_tiebreak_columns + sprint_tiebreak_columns,
+        ascending=[False] * (
+            1 + len(race_tiebreak_columns) + len(sprint_tiebreak_columns)
+        ),
+        kind="stable"
     )
 
     table.insert(0, "Pořadí", range(1, len(table) + 1))
+
+    table = table.drop(
+        columns=race_tiebreak_columns + sprint_tiebreak_columns
+    )
 
     return table
 

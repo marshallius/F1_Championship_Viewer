@@ -19,6 +19,10 @@ def load_data():
     }
 
 
+def save_data(data):
+    with open(DATA_FILE, "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+
 
 st.title("📜 Historie závodů")
 
@@ -139,3 +143,38 @@ else:
         hide_index=True
     )
 
+    st.divider()
+
+    st.subheader("Nebezpečná zóna")
+
+    confirm_delete = st.checkbox(
+        f"Chci smazat závod {selected_race['race']}"
+    )
+
+    if st.button("🗑️ Smazat vybraný závod"):
+        if confirm_delete:
+            data["races"].pop(selected_index)
+            data["current_race"] = len(data["races"])
+            save_data(data)
+
+            st.success("Závod byl smazán. Obnov stránku.")
+            st.rerun()
+        else:
+            st.error("Nejdřív potvrď zaškrtnutím checkboxu.")
+
+    st.divider()
+
+    st.subheader("Reset celé sezóny")
+
+    confirm_reset = st.checkbox("Chci smazat všechny uložené závody")
+
+    if st.button("🧹 Resetovat sezónu"):
+        if confirm_reset:
+            data["races"] = []
+            data["current_race"] = 0
+            save_data(data)
+
+            st.success("Sezóna byla resetována.")
+            st.rerun()
+        else:
+            st.error("Nejdřív potvrď reset zaškrtnutím checkboxu.")
